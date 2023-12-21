@@ -3,6 +3,7 @@ package io.github.dasrd.iot.link.sdk.client.link;
 import io.github.dasrd.iot.link.sdk.client.LinkKitInitParams;
 import io.github.dasrd.iot.link.sdk.constants.Constants;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
+import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
@@ -19,7 +20,7 @@ public class MqttConnectOptionDefaultStrategy extends AbstractMqttConnectOptions
         options.setCleanSession(true);
         options.setUserName(clientConf.getDeviceId());
         options.setConnectionTimeout(Constants.DEFAULT_CONNECT_TIMEOUT);
-        options.setKeepAliveInterval(Constants.DEFAULT_KEEPLIVE);
+        options.setKeepAliveInterval(Constants.DEFAULT_KEEP_LIVE);
         options.setAutomaticReconnect(false);
         return options;
     }

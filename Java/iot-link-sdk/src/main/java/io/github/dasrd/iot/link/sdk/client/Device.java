@@ -26,6 +26,7 @@ public class Device extends AbstractDevice {
      *
      * @return 此接口为阻塞调用，如果连接成功，返回0；否则返回-1
      */
+    @Override
     public int init() {
         return super.init();
     }
@@ -36,11 +37,13 @@ public class Device extends AbstractDevice {
      * @param serviceId     服务id，要和设备模型定义一致
      * @param deviceService 服务实例
      */
+    @Override
     public void addService(String serviceId, AbstractService deviceService) {
         super.addService(serviceId, deviceService);
     }
 
 
+    @Override
     public AbstractService getService(String serviceId) {
         return super.getService(serviceId);
     }
@@ -54,6 +57,7 @@ public class Device extends AbstractDevice {
      *
      * @return 设备客户端实例
      */
+    @Override
     public LinkKit getClient() {
         return super.getClient();
     }

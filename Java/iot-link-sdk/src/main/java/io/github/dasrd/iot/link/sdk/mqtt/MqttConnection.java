@@ -2,7 +2,6 @@ package io.github.dasrd.iot.link.sdk.mqtt;
 
 import io.github.dasrd.iot.link.sdk.client.LinkKitInitParams;
 import io.github.dasrd.iot.link.sdk.client.link.MqttConnectOptionsStrategy;
-import io.github.dasrd.iot.link.sdk.utils.IotUtil;
 import io.github.dasrd.iot.link.sdk.constants.Constants;
 import io.github.dasrd.iot.link.sdk.listener.BehaviorListener;
 import io.github.dasrd.iot.link.sdk.listener.DefaultPublishListenerImpl;
@@ -11,6 +10,7 @@ import io.github.dasrd.iot.link.sdk.listener.RawMessageListener;
 import io.github.dasrd.iot.link.sdk.transport.ConnectListener;
 import io.github.dasrd.iot.link.sdk.transport.Connection;
 import io.github.dasrd.iot.link.sdk.transport.RawMessage;
+import io.github.dasrd.iot.link.sdk.utils.IotUtil;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.internal.ConnectActionListener;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public class MqttConnection implements Connection {
 
     private int connectResultCode;
 
-    public MqttConnection(LinkKitInitParams clientConf,RawMessageListener rawMessageListener) {
+    public MqttConnection(LinkKitInitParams clientConf, RawMessageListener rawMessageListener) {
         this.clientConf = clientConf;
         this.rawMessageListener = rawMessageListener;
     }
@@ -70,7 +70,7 @@ public class MqttConnection implements Connection {
                 }
 
             } catch (Exception e) {
-                log.error("messageArrived异常",e);
+                log.error("messageArrived异常", e);
             }
 
         }
@@ -100,7 +100,7 @@ public class MqttConnection implements Connection {
 
             DisconnectedBufferOptions bufferOptions = new DisconnectedBufferOptions();
             bufferOptions.setBufferEnabled(true);
-            if (createMqttConnection(bufferOptions,mqttConnectOptionsStrategy)) {
+            if (createMqttConnection(bufferOptions, mqttConnectOptionsStrategy)) {
                 return -1;
             }
 
@@ -109,14 +109,14 @@ public class MqttConnection implements Connection {
                     try {
                         wait(Constants.DEFAULT_CONNECT_TIMEOUT * 1000);
                     } catch (InterruptedException e) {
-                        log.error("InterruptedException异常",e);
+                        log.error("InterruptedException异常", e);
                     }
                 }
             }
 
         } catch (MqttException e) {
             log.error("connect error, the deviceId is {}. exception is {}", clientConf.getDeviceId(),
-                e);
+                    e);
         }
 
         if (mqttAsyncClient.isConnected()) {
@@ -132,8 +132,8 @@ public class MqttConnection implements Connection {
         return connectResultCode;
     }
 
-    private boolean createMqttConnection(DisconnectedBufferOptions bufferOptions,MqttConnectOptionsStrategy mqttConnectOptionsStrategy)
-        throws MqttException {
+    private boolean createMqttConnection(DisconnectedBufferOptions bufferOptions, MqttConnectOptionsStrategy mqttConnectOptionsStrategy)
+            throws MqttException {
         mqttAsyncClient.setBufferOpts(bufferOptions);
 
         mqttAsyncClient.setCallback(callback);
@@ -163,7 +163,7 @@ public class MqttConnection implements Connection {
             @Override
             public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
                 log.info("connect failed, the reason is {}", throwable.toString());
-                if(throwable instanceof MqttException) {
+                if (throwable instanceof MqttException) {
                     MqttException me = (MqttException) throwable;
                     connectResultCode = me.getReasonCode();
                 }
@@ -182,7 +182,7 @@ public class MqttConnection implements Connection {
 
 
     @Override
-    public void publishMessage(RawMessage message,BehaviorListener listener) {
+    public void publishMessage(RawMessage message, BehaviorListener listener) {
 
         try {
             MqttMessage mqttMessage = new MqttMessage(message.getPayload());
@@ -193,20 +193,21 @@ public class MqttConnection implements Connection {
             mqttAsyncClient.publish(message.getTopic(), mqttMessage, message.getTopic(), defaultPublishListener);
             log.info("publish message topic is {}, msg =  {}", message.getTopic(), message.toString());
         } catch (MqttException e) {
-            log.error("publishMessage异常",e);
+            log.error("publishMessage异常", e);
             if (listener != null) {
                 listener.onFailure(null, e);
             }
         }
     }
 
+    @Override
     public void close() {
 
         if (mqttAsyncClient.isConnected()) {
             try {
                 mqttAsyncClient.disconnect();
             } catch (MqttException e) {
-                log.error("close异常",e);
+                log.error("close异常", e);
             }
         }
     }
@@ -220,19 +221,18 @@ public class MqttConnection implements Connection {
     }
 
 
-
-
     /**
      * 订阅指定主题
      *
      * @param topic 主题
      */
-    public void subscribeTopic(String topic,BehaviorListener listener,int qos) {
+    @Override
+    public void subscribeTopic(String topic, BehaviorListener listener, int qos) {
         DefaultSubscribeListenerImpl defaultSubscribeListener = new DefaultSubscribeListenerImpl(topic, listener);
         try {
             mqttAsyncClient.subscribe(topic, qos, null, defaultSubscribeListener);
         } catch (MqttException e) {
-            log.error("subscribeTopic异常",e);
+            log.error("subscribeTopic异常", e);
             if (listener != null) {
                 listener.onFailure(topic, e);
             }
@@ -245,12 +245,13 @@ public class MqttConnection implements Connection {
      *
      * @param topic 主题
      */
-    public void unsubscribeTopic(String topic,BehaviorListener listener) {
+    @Override
+    public void unsubscribeTopic(String topic, BehaviorListener listener) {
         DefaultSubscribeListenerImpl defaultSubscribeListener = new DefaultSubscribeListenerImpl(topic, listener);
         try {
             mqttAsyncClient.unsubscribe(topic, null, defaultSubscribeListener);
         } catch (MqttException e) {
-            log.error("unsubscribeTopic异常",e);
+            log.error("unsubscribeTopic异常", e);
             if (listener != null) {
                 listener.onFailure(topic, e);
             }

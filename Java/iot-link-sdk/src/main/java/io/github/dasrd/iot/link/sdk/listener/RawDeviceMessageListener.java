@@ -4,6 +4,9 @@ package io.github.dasrd.iot.link.sdk.listener;
 import io.github.dasrd.iot.link.sdk.request.RawDeviceMessage;
 
 
+/**
+ * @author tangsq
+ */
 public interface RawDeviceMessageListener {
 
     /**

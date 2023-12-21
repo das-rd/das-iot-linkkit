@@ -4,8 +4,8 @@ import io.github.dasrd.iot.link.sdk.client.link.MqttConnectOptionDefaultStrategy
 import io.github.dasrd.iot.link.sdk.client.link.MqttConnectOptionSha1Strategy;
 
 public enum MqttConectionStrategyEnum {
-    Mqtt_Connect_Option_Default_Strategy("MqttConnectOptionDefaultStrategy", MqttConnectOptionDefaultStrategy.class),
-    Mqtt_Connect_Option_Sha1_Strategy("MqttConnectOptionSha1Strategy", MqttConnectOptionSha1Strategy.class),
+    MQTT_CONNECT_OPTION_DEFAULT_STRATEGY("MqttConnectOptionDefaultStrategy", MqttConnectOptionDefaultStrategy.class),
+    MQTT_CONNECT_OPTION_SHA1_STRATEGY("MqttConnectOptionSha1Strategy", MqttConnectOptionSha1Strategy.class),
     ;
 
     private String strategyName;

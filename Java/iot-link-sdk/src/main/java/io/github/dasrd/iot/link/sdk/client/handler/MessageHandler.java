@@ -7,6 +7,9 @@ import io.github.dasrd.iot.link.sdk.transport.RawMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author tangsq
+ */
 public class MessageHandler implements MessageReceivedHandler {
     private static final Logger log = LoggerFactory.getLogger(MessageHandler.class);
 
@@ -29,8 +32,7 @@ public class MessageHandler implements MessageReceivedHandler {
 
         if (isSystemFormat) {
             log.debug("receive message in system format: {}", message);
-            boolean isCurrentDevice = (deviceMessage.getDeviceId() == null
-                    || deviceMessage.getDeviceId().equals(deviceClient.getDeviceId()));
+            boolean isCurrentDevice = (deviceMessage.getDeviceId() == null || deviceMessage.getDeviceId().equals(deviceClient.getClientConf().getDeviceId()));
 
             if (deviceClient.getDeviceMessageListener() != null && isCurrentDevice) {
                 deviceClient.getDeviceMessageListener().onDeviceMessage(deviceMessage);

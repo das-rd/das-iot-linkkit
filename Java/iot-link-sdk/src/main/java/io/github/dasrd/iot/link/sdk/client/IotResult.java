@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * 处理结果
+ * @author tangsq
  */
 public class IotResult {
     public final static IotResult SUCCESS = new IotResult(0,"Success");

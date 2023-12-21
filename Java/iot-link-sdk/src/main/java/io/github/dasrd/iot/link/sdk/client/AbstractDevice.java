@@ -10,38 +10,32 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 抽象设备类
+ *
+ * @author yangyi
  */
 public class AbstractDevice {
     private static final Logger log = LoggerFactory.getLogger(AbstractDevice.class);
 
-    private LinkKit client;
+    private final LinkKit client;
 
     private final String deviceId;
 
     private final String productId;
 
-    private final Map<String,AbstractService> services = new ConcurrentHashMap<>();
+    private final Map<String, AbstractService> services = new ConcurrentHashMap<>();
 
 
     /**
      * 构造函数，创建设备
      */
-    public AbstractDevice(String mqttHost,String mqttPort,String productId,String deviceId,String deviceSecret,String clientId,MqttConectionStrategyEnum mqttConectionStrategyEnum) {
-        LinkKitInitParams clientConf = new LinkKitInitParams();
-        clientConf.setMqttHost(mqttHost);
-        clientConf.setMqttPort(mqttPort);
-        clientConf.setProductId(productId);
-        clientConf.setDeviceId(deviceId);
-        clientConf.setDeviceSecret(deviceSecret);
-        clientConf.setClientId(clientId);
-        clientConf.setMqttConectionStrategyEnum(mqttConectionStrategyEnum);
+    public AbstractDevice(String mqttHost, String mqttPort, String productId, String deviceId, String deviceSecret, String clientId, MqttConectionStrategyEnum mqttConectionStrategyEnum) {
+        LinkKitInitParams clientConf = new LinkKitInitParams(productId, deviceId, deviceSecret, mqttHost, mqttPort, clientId);
         this.deviceId = deviceId;
         this.productId = productId;
-        this.client = new LinkKit(clientConf, this);
+        this.client = new LinkKit(clientConf);
         initSysServices();
         log.info("create device, the deviceId is {}", clientConf.getDeviceId());
     }
-
 
 
     /**
@@ -115,10 +109,6 @@ public class AbstractDevice {
     public String getProductId() {
         return productId;
     }
-
-
-
-
 
 
 }

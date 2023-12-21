@@ -8,8 +8,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 请求管理器
+ * @author yangyi
  */
 public class RequestService {
+
     private static final Logger log = LoggerFactory.getLogger(RequestService.class);
 
     private final ConcurrentHashMap<String, IotRequest> waitRequests = new ConcurrentHashMap<>();

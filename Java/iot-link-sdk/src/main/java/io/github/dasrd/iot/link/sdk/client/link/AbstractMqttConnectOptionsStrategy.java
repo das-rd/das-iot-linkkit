@@ -2,6 +2,9 @@ package io.github.dasrd.iot.link.sdk.client.link;
 
 import io.github.dasrd.iot.link.sdk.client.LinkKitInitParams;
 
+/**
+ * @author tangsq
+ */
 public abstract class AbstractMqttConnectOptionsStrategy implements MqttConnectOptionsStrategy {
     public LinkKitInitParams clientConf;
 

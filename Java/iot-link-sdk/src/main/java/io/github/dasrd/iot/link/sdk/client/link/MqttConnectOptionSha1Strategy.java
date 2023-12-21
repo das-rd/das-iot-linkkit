@@ -14,7 +14,11 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MqttConnectOptionSha1Strategy extends AbstractMqttConnectOptionsStrategy{
+/**
+ * @author tangsq
+ * @date 2023/12/19
+ */
+public class MqttConnectOptionSha1Strategy extends AbstractMqttConnectOptionsStrategy {
     public MqttConnectOptionSha1Strategy(LinkKitInitParams clientConf) {
         super(clientConf);
     }
@@ -24,19 +28,18 @@ public class MqttConnectOptionSha1Strategy extends AbstractMqttConnectOptionsStr
         MqttConnectOptions options = new MqttConnectOptions();
         options.setHttpsHostnameVerificationEnabled(false);
         options.setCleanSession(true);
-        options.setUserName(clientConf.getDeviceId()+"&"+clientConf.getProductId());
+        options.setUserName(clientConf.getDeviceId() + "&" + clientConf.getProductId());
         options.setPassword(getPassWordBySecret(clientConf).toCharArray());
         options.setConnectionTimeout(Constants.DEFAULT_CONNECT_TIMEOUT);
-        options.setKeepAliveInterval(Constants.DEFAULT_KEEPLIVE);
+        options.setKeepAliveInterval(Constants.DEFAULT_KEEP_LIVE);
         options.setAutomaticReconnect(false);
-
         return options;
     }
 
     @Override
     public MqttAsyncClient getMqttAsyncClient() {
         String clientBuilderId = "{0}|securemode=2,signmethod=hmacsha1,timestamp={1}|";
-        String clientId = MessageFormat.format(clientBuilderId,clientConf.getClientId(),clientConf.getTimestamp());
+        String clientId = MessageFormat.format(clientBuilderId, clientConf.getClientId(), clientConf.getTimestamp());
         try {
             return new MqttAsyncClient(clientConf.getServerUri(), clientId, new MemoryPersistence());
         } catch (MqttException e) {
@@ -79,7 +82,6 @@ public class MqttConnectOptionSha1Strategy extends AbstractMqttConnectOptionsStr
         }
         return signResult;
     }
-
 
 
     /**
